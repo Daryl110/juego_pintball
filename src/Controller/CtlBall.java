@@ -6,7 +6,6 @@
 package Controller;
 
 import Model.Ball;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
@@ -19,7 +18,6 @@ import javax.swing.JComponent;
 public class CtlBall extends javax.swing.JFrame {
 
     private Ball ball;
-
     private Image image = new ImageIcon(getClass().getResource("..\\Resourses\\ballOfSoccer.jpg")).getImage();
 
     public CtlBall() {

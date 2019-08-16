@@ -17,8 +17,8 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        FrmMain i = new FrmMain();
-        i.setVisible(true);
+        FrmMain windowMain = new FrmMain();
+        windowMain.setVisible(true);
     }
     
 }
