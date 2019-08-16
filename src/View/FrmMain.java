@@ -1,13 +1,20 @@
 package View;
 
 import Controller.CtlBall;
+import Controller.CtlBar;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class FrmMain extends javax.swing.JFrame {
 
-    CtlBall ballController;
+    public static ArrayList<CtlBall> threadsBallsControllers;
+    private CtlBar barController;
 
     public FrmMain() {
         initComponents();
+        this.threadsBallsControllers = new ArrayList<>();
+        CtlBall.time = 1;
+        this.drawBar();
     }
 
     @SuppressWarnings("unchecked")
@@ -30,9 +37,26 @@ public class FrmMain extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
+
+        jTabbedPane1.setFocusable(false);
+        jTabbedPane1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTabbedPane1KeyPressed(evt);
+            }
+        });
 
         pnlDraw.setBackground(new java.awt.Color(255, 255, 255));
         pnlDraw.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        pnlDraw.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                pnlDrawKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlDrawLayout = new javax.swing.GroupLayout(pnlDraw);
         pnlDraw.setLayout(pnlDrawLayout);
@@ -51,10 +75,25 @@ public class FrmMain extends javax.swing.JFrame {
                 btnAddBallActionPerformed(evt);
             }
         });
+        btnAddBall.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnAddBallKeyPressed(evt);
+            }
+        });
 
         btnStarGame.setText("Start Game");
+        btnStarGame.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnStarGameKeyPressed(evt);
+            }
+        });
 
         btnRestartGame.setText("Restart Game");
+        btnRestartGame.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnRestartGameKeyPressed(evt);
+            }
+        });
 
         jLabel1.setText("Score:");
 
@@ -130,7 +169,7 @@ public class FrmMain extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 699, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -147,12 +186,12 @@ public class FrmMain extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 713, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTabbedPane1)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -164,24 +203,46 @@ public class FrmMain extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddBallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBallActionPerformed
-        if (ballController == null) {
-            ballController = new CtlBall(pnlDraw);
-        } else {
-            pnlDraw.removeAll();
-            ballController.removeAll();
-            ballController = new CtlBall(pnlDraw);
-        }
-
-        Thread hilo = new Thread(ballController, "Proceso grafico");
-        hilo.start();
+        CtlBall ballController = new CtlBall(this.pnlDraw, this.threadsBallsControllers.size(), this.barController);
+        Thread threadBallController = new Thread(ballController, this.threadsBallsControllers.size()+"");
+        this.threadsBallsControllers.add(ballController);
+        threadBallController.start();
+        this.lblNumberBall.setText(""+this.threadsBallsControllers.size());
+        CtlBall.time += 1;
     }//GEN-LAST:event_btnAddBallActionPerformed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        moveBar(evt);
+    }//GEN-LAST:event_formKeyPressed
+
+    private void btnAddBallKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnAddBallKeyPressed
+        moveBar(evt);
+    }//GEN-LAST:event_btnAddBallKeyPressed
+
+    private void btnRestartGameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnRestartGameKeyPressed
+        moveBar(evt);
+    }//GEN-LAST:event_btnRestartGameKeyPressed
+
+    private void btnStarGameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnStarGameKeyPressed
+        moveBar(evt);
+    }//GEN-LAST:event_btnStarGameKeyPressed
+
+    private void pnlDrawKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pnlDrawKeyPressed
+        moveBar(evt);
+    }//GEN-LAST:event_pnlDrawKeyPressed
+
+    private void jTabbedPane1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTabbedPane1KeyPressed
+        moveBar(evt);
+    }//GEN-LAST:event_jTabbedPane1KeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -200,4 +261,20 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JLabel lblScore;
     private javax.swing.JPanel pnlDraw;
     // End of variables declaration//GEN-END:variables
+    
+    private void drawBar(){
+        this.barController = new CtlBar(this.pnlDraw);
+        Thread threadBarController = new Thread(barController);
+        threadBarController.start();
+    }
+    
+    private void moveBar(java.awt.event.KeyEvent evt){
+        if (evt.getKeyCode() == KeyEvent.VK_LEFT) {
+            this.barController.moveLeft();
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_RIGHT) {
+            this.barController.moveRight(this.pnlDraw);
+        }
+    }
+
 }

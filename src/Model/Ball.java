@@ -13,12 +13,15 @@ public class Ball {
 
     private int width;
     private int height;
-    private int posX = 50;
-    private int posY = 50;
+    private int posX;
+    private int posY;
 
-    public Ball(int ancho, int alto) {
-        this.width = ancho;
-        this.height = alto;
+    public Ball(int width, int height, int posX, int posY) {
+        this.width = width;
+        this.height = height;
+        this.posX = posX;
+        this.posY = posY;
+        
     }
 
     public int getWidth() {
