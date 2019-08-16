@@ -1,10 +1,10 @@
 package View;
 
-import Controller.DrawerBall;
+import Controller.CtlBall;
 
 public class FrmMain extends javax.swing.JFrame {
 
-    DrawerBall canvas;
+    CtlBall ballController;
 
     public FrmMain() {
         initComponents();
@@ -171,15 +171,15 @@ public class FrmMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddBallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBallActionPerformed
-        if (canvas == null) {
-            canvas = new DrawerBall(pnlDraw);
+        if (ballController == null) {
+            ballController = new CtlBall(pnlDraw);
         } else {
             pnlDraw.removeAll();
-            canvas.removeAll();
-            canvas = new DrawerBall(pnlDraw);
+            ballController.removeAll();
+            ballController = new CtlBall(pnlDraw);
         }
 
-        Thread hilo = new Thread(canvas, "Proceso grafico");
+        Thread hilo = new Thread(ballController, "Proceso grafico");
         hilo.start();
     }//GEN-LAST:event_btnAddBallActionPerformed
 
