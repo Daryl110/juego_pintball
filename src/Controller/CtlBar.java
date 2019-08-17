@@ -18,12 +18,14 @@ public class CtlBar extends JComponent implements Runnable {
 
     private Bar bar;
     private final JComponent panel;
+    private int moveVelocity;
 
     public CtlBar(JComponent panel) {
         this.bar = new Bar(200, 20, (int) panel.getWidth() / 2, panel.getHeight()-20);
         this.panel = panel;
         this.setBounds(0, 0, this.panel.getWidth(), this.panel.getHeight());
         this.panel.add(this);
+        this.moveVelocity = 40;
     }
 
     @Override
@@ -50,14 +52,14 @@ public class CtlBar extends JComponent implements Runnable {
 
     public void moveRight(JComponent temp) {
         if (this.bar.getPosX() < temp.getWidth() - 200) {
-            this.bar.setPosX(bar.getPosX() + 20);
+            this.bar.setPosX(bar.getPosX() + this.moveVelocity);
         }
 
     }
 
     public void moveLeft() {
         if (this.bar.getPosX() > 0) {
-            this.bar.setPosX(this.bar.getPosX() - 20);
+            this.bar.setPosX(this.bar.getPosX() - this.moveVelocity);
         }
 
     }

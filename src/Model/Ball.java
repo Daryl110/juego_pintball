@@ -55,7 +55,5 @@ public class Ball {
     public void setPosY(int posY) {
         this.posY = posY;
     }
-    
-    
 
 }
