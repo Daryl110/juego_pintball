@@ -13,8 +13,10 @@ public class FrmMain extends javax.swing.JFrame {
     public FrmMain() {
         initComponents();
         this.threadsBallsControllers = new ArrayList<>();
-        CtlBall.time = 1;
+        CtlBall.time = 20;
         this.drawBar();
+        this.btnAddBall.setEnabled(false);
+        this.btnRestartGame.setEnabled(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -50,6 +52,12 @@ public class FrmMain extends javax.swing.JFrame {
             }
         });
 
+        jPanel2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jPanel2KeyPressed(evt);
+            }
+        });
+
         pnlDraw.setBackground(new java.awt.Color(255, 255, 255));
         pnlDraw.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         pnlDraw.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -82,9 +90,17 @@ public class FrmMain extends javax.swing.JFrame {
         });
 
         btnStarGame.setText("Start Game");
+        btnStarGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStarGameActionPerformed(evt);
+            }
+        });
         btnStarGame.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 btnStarGameKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                btnStarGameKeyTyped(evt);
             }
         });
 
@@ -96,12 +112,32 @@ public class FrmMain extends javax.swing.JFrame {
         });
 
         jLabel1.setText("Score:");
+        jLabel1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jLabel1KeyPressed(evt);
+            }
+        });
 
         lblScore.setText("00000");
+        lblScore.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                lblScoreKeyPressed(evt);
+            }
+        });
 
         jLabel2.setText("N° Balls");
+        jLabel2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jLabel2KeyPressed(evt);
+            }
+        });
 
         lblNumberBall.setText("00000");
+        lblNumberBall.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                lblNumberBallKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -213,10 +249,10 @@ public class FrmMain extends javax.swing.JFrame {
 
     private void btnAddBallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBallActionPerformed
         CtlBall ballController = new CtlBall(this.pnlDraw, this.threadsBallsControllers.size(), this.barController);
-        Thread threadBallController = new Thread(ballController, this.threadsBallsControllers.size()+"");
+        Thread threadBallController = new Thread(ballController, this.threadsBallsControllers.size() + "");
         this.threadsBallsControllers.add(ballController);
         threadBallController.start();
-        this.lblNumberBall.setText(""+this.threadsBallsControllers.size());
+        this.lblNumberBall.setText("" + this.threadsBallsControllers.size());
         CtlBall.time += 1;
     }//GEN-LAST:event_btnAddBallActionPerformed
 
@@ -244,6 +280,44 @@ public class FrmMain extends javax.swing.JFrame {
         moveBar(evt);
     }//GEN-LAST:event_jTabbedPane1KeyPressed
 
+    private void btnStarGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStarGameActionPerformed
+        for (int i = 0; i < 30; i++) {
+            CtlBall ballController = new CtlBall(this.pnlDraw, this.threadsBallsControllers.size(), this.barController);
+            Thread threadBallController = new Thread(ballController, this.threadsBallsControllers.size() + "");
+            this.threadsBallsControllers.add(ballController);
+            threadBallController.start();
+            this.lblNumberBall.setText("" + this.threadsBallsControllers.size());
+        }
+        this.btnStarGame.setEnabled(false);
+        this.btnRestartGame.setEnabled(true);
+        this.btnAddBall.setEnabled(true);
+        this.pnlDraw.requestFocus();
+    }//GEN-LAST:event_btnStarGameActionPerformed
+
+    private void jPanel2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel2KeyPressed
+        moveBar(evt);
+    }//GEN-LAST:event_jPanel2KeyPressed
+
+    private void lblNumberBallKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lblNumberBallKeyPressed
+        moveBar(evt);
+    }//GEN-LAST:event_lblNumberBallKeyPressed
+
+    private void lblScoreKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lblScoreKeyPressed
+        moveBar(evt);
+    }//GEN-LAST:event_lblScoreKeyPressed
+
+    private void jLabel1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLabel1KeyPressed
+        moveBar(evt);
+    }//GEN-LAST:event_jLabel1KeyPressed
+
+    private void jLabel2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLabel2KeyPressed
+        moveBar(evt);
+    }//GEN-LAST:event_jLabel2KeyPressed
+
+    private void btnStarGameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnStarGameKeyTyped
+        moveBar(evt);
+    }//GEN-LAST:event_btnStarGameKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddBall;
@@ -257,18 +331,18 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JLabel lblNumberBall;
+    public static javax.swing.JLabel lblNumberBall;
     private javax.swing.JLabel lblScore;
     private javax.swing.JPanel pnlDraw;
     // End of variables declaration//GEN-END:variables
-    
-    private void drawBar(){
+
+    private void drawBar() {
         this.barController = new CtlBar(this.pnlDraw);
         Thread threadBarController = new Thread(barController);
         threadBarController.start();
     }
-    
-    private void moveBar(java.awt.event.KeyEvent evt){
+
+    private void moveBar(java.awt.event.KeyEvent evt) {
         if (evt.getKeyCode() == KeyEvent.VK_LEFT) {
             this.barController.moveLeft();
         }
