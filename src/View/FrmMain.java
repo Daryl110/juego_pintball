@@ -13,7 +13,6 @@ public class FrmMain extends javax.swing.JFrame {
     public FrmMain() {
         initComponents();
         this.threadsBallsControllers = new ArrayList<>();
-        CtlBall.time = 20;
         this.drawBar();
         this.btnAddBall.setEnabled(false);
         this.btnRestartGame.setEnabled(false);
@@ -253,7 +252,6 @@ public class FrmMain extends javax.swing.JFrame {
         this.threadsBallsControllers.add(ballController);
         threadBallController.start();
         this.lblNumberBall.setText("" + this.threadsBallsControllers.size());
-        CtlBall.time += 1;
     }//GEN-LAST:event_btnAddBallActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed

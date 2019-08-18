@@ -11,8 +11,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
@@ -25,7 +23,6 @@ public class CtlBall extends JComponent implements Runnable {
     private Ball ball;
     private final Image image;
     private final JComponent panel;
-    public static int time;
     private final CtlBar barController;
     private final int moveVelocity;
 
@@ -50,10 +47,10 @@ public class CtlBall extends JComponent implements Runnable {
         while (true) {
             try {
                 this.panel.repaint();
-                Thread.sleep(10);
+                Thread.sleep(FrmMain.threadsBallsControllers.size()*2);
                 this.move();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(CtlBall.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                System.out.println("[Error] : "+ex);
             }
         }
     }
@@ -162,7 +159,6 @@ public class CtlBall extends JComponent implements Runnable {
 
     private void deleteBall() {
         this.panel.remove(this);//elimina la bola del panel para no dibujarla mas
-        time -= 1;//reduce el tiempo 1 por la bola que se fue (-1 milisegundo de silencio por esa bola)
         FrmMain.threadsBallsControllers.remove(this);//remueve la bola del arreglo
         FrmMain.lblNumberBall.setText("" + FrmMain.threadsBallsControllers.size());//pinta el numero actual de bolas en el arreglo
     }
@@ -171,7 +167,7 @@ public class CtlBall extends JComponent implements Runnable {
         int number = 0;
         if (orientation.equalsIgnoreCase("x")) {
             number = ThreadLocalRandom.current().nextInt(0, this.panel.getWidth() - 30);//numeros aleatorios para el ancho
-        }else{
+        } else {
             number = ThreadLocalRandom.current().nextInt(0, this.panel.getHeight() - 30);//numeros aleatotios para el alto
         }
         return number;
