@@ -131,10 +131,7 @@ public class CtlBall extends JComponent implements Runnable {
                 }
                 break;
             case topRight://Movimiento arribaDerecha
-                if ((this.ball.getPosX() <= this.panel.getWidth() - 30 && this.ball.getPosY() >= 0) 
-                        || (this.ball.getPosX() <= this.panel.getWidth() && this.ball.getPosY() <= 0)
-                        || (this.ball.getPosX() >= this.panel.getWidth() && this.ball.getPosY() <= 0)
-                        || (this.ball.getPosX() <= this.panel.getWidth() && this.ball.getPosY() >= 0)) {//si la bola no ha tocado la parte derecha y si la bola no ha tocado la parte de arriba
+                if (this.ball.getPosX() <= this.panel.getWidth() - 30 && this.ball.getPosY() >= 0) {//si la bola no ha tocado la parte derecha y si la bola no ha tocado la parte de arriba
                     this.ball.setPosX(this.ball.getPosX() + this.moveVelocity);//mover a la derecha
                     this.ball.setPosY(this.ball.getPosY() - this.moveVelocity);//mover hacia arriba
                     if (this.ball.getPosY() <= 0 && this.ball.getPosX() >= 0) {//si la bola toca la parte de arriba
@@ -143,6 +140,9 @@ public class CtlBall extends JComponent implements Runnable {
                     if (this.ball.getPosX() >= this.panel.getWidth() - 30 && this.ball.getPosY() >= 0) {//si la bola toca la parte derecha
                         this.ballState = Movements.topLeft;//Se cambia el estado a movimiento para que se mueva arriba izquierda
                     }
+                }
+                else if (this.ball.getPosX() <= 0 && this.ball.getPosY() <= 0) {
+                    this.ballState = Movements.downLeft;
                 }
                 break;
 
@@ -186,7 +186,7 @@ public class CtlBall extends JComponent implements Runnable {
                 int score = Integer.parseInt(FrmMain.lblScore.getText() + "");//Se solicita el valor del score
                 FrmMain.ctl.listScore.add(new Score(name, score));//Se añade a la lista de score
                 FrmMain.ctl.listScore();//Se actualiza
-                
+
             }
         }
         synActioScore(2);//Borra puntos al score actual
