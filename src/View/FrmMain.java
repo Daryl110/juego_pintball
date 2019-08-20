@@ -2,13 +2,18 @@ package View;
 
 import Controller.CtlBall;
 import Controller.CtlBar;
+import Controller.CtlTableScore;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class FrmMain extends javax.swing.JFrame {
 
     public static ArrayList<CtlBall> threadsBallsControllers;
     private CtlBar barController;
+    public static CtlTableScore ctl;
 
     public FrmMain() {
         initComponents();
@@ -16,6 +21,7 @@ public class FrmMain extends javax.swing.JFrame {
         this.drawBar();
         this.btnAddBall.setEnabled(false);
         this.btnRestartGame.setEnabled(false);
+        ctl = new CtlTableScore();
     }
 
     @SuppressWarnings("unchecked")
@@ -35,7 +41,7 @@ public class FrmMain extends javax.swing.JFrame {
         lblNumberBall = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblScore = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addKeyListener(new java.awt.event.KeyAdapter() {
@@ -104,6 +110,11 @@ public class FrmMain extends javax.swing.JFrame {
         });
 
         btnRestartGame.setText("Restart Game");
+        btnRestartGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRestartGameActionPerformed(evt);
+            }
+        });
         btnRestartGame.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 btnRestartGameKeyPressed(evt);
@@ -185,7 +196,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Game", jPanel2);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblScore.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -196,7 +207,7 @@ public class FrmMain extends javax.swing.JFrame {
                 "#", "NickName", "Score"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblScore);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -279,17 +290,7 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jTabbedPane1KeyPressed
 
     private void btnStarGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStarGameActionPerformed
-        for (int i = 0; i < 30; i++) {
-            CtlBall ballController = new CtlBall(this.pnlDraw, this.threadsBallsControllers.size(), this.barController);
-            Thread threadBallController = new Thread(ballController, this.threadsBallsControllers.size() + "");
-            this.threadsBallsControllers.add(ballController);
-            threadBallController.start();
-            this.lblNumberBall.setText("" + this.threadsBallsControllers.size());
-        }
-        this.btnStarGame.setEnabled(false);
-        this.btnRestartGame.setEnabled(true);
-        this.btnAddBall.setEnabled(true);
-        this.pnlDraw.requestFocus();
+        startGame();
     }//GEN-LAST:event_btnStarGameActionPerformed
 
     private void jPanel2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel2KeyPressed
@@ -316,11 +317,30 @@ public class FrmMain extends javax.swing.JFrame {
         moveBar(evt);
     }//GEN-LAST:event_btnStarGameKeyTyped
 
+    private void btnRestartGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestartGameActionPerformed
+        pnlDraw.removeAll();
+        for (int i = 0; i < this.threadsBallsControllers.size(); i++) {
+            this.threadsBallsControllers.get(i).dead = true;
+            this.threadsBallsControllers.set(i, null);
+        }
+        this.threadsBallsControllers = new ArrayList<>();
+        this.drawBar();
+        lblScore.setText("0000");
+        try {
+            JOptionPane.showMessageDialog(this, "Esta cargando el nuevo juego");
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(FrmMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        startGame();
+    }//GEN-LAST:event_btnRestartGameActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddBall;
+    public static javax.swing.JButton btnAddBall;
     private javax.swing.JButton btnRestartGame;
-    private javax.swing.JButton btnStarGame;
+    public static javax.swing.JButton btnStarGame;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -328,10 +348,10 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     public static javax.swing.JLabel lblNumberBall;
-    private javax.swing.JLabel lblScore;
+    public static javax.swing.JLabel lblScore;
     private javax.swing.JPanel pnlDraw;
+    public static javax.swing.JTable tblScore;
     // End of variables declaration//GEN-END:variables
 
     private void drawBar() {
@@ -347,6 +367,20 @@ public class FrmMain extends javax.swing.JFrame {
         if (evt.getKeyCode() == KeyEvent.VK_RIGHT) {
             this.barController.moveRight(this.pnlDraw);
         }
+    }
+
+    private void startGame() {
+        for (int i = 0; i < 30; i++) {
+            CtlBall ballController = new CtlBall(this.pnlDraw, this.threadsBallsControllers.size(), this.barController);
+            Thread threadBallController = new Thread(ballController, this.threadsBallsControllers.size() + "");
+            this.threadsBallsControllers.add(ballController);
+            threadBallController.start();
+            this.lblNumberBall.setText("" + this.threadsBallsControllers.size());
+        }
+        this.btnStarGame.setEnabled(false);
+        this.btnRestartGame.setEnabled(true);
+        this.btnAddBall.setEnabled(true);
+        this.pnlDraw.requestFocus();
     }
 
 }
