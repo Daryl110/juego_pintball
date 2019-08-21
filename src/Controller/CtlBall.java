@@ -11,6 +11,7 @@ import View.FrmMain;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -62,7 +63,11 @@ public class CtlBall extends JComponent implements Runnable {
     @Override
     public void paint(Graphics grphcs) {
         super.paint(grphcs);
-        grphcs.setColor(Color.red);
+        Random rand = new Random(); 
+        float r = rand.nextFloat();
+        float g = rand.nextFloat();
+        float b = rand.nextFloat();
+        grphcs.setColor(new Color(r, g, b));
         grphcs.fillOval(this.ball.getPosX(), this.ball.getPosY(), this.ball.getWidth(), this.ball.getHeight());
     }
 
@@ -140,8 +145,7 @@ public class CtlBall extends JComponent implements Runnable {
                     if (this.ball.getPosX() >= this.panel.getWidth() - 30 && this.ball.getPosY() >= 0) {//si la bola toca la parte derecha
                         this.ballState = Movements.topLeft;//Se cambia el estado a movimiento para que se mueva arriba izquierda
                     }
-                }
-                else if (this.ball.getPosX() <= 0 && this.ball.getPosY() <= 0) {
+                } else if (this.ball.getPosX() <= 0 && this.ball.getPosY() <= 0) {
                     this.ballState = Movements.downLeft;
                 }
                 break;
@@ -180,7 +184,7 @@ public class CtlBall extends JComponent implements Runnable {
                 FrmMain.btnAddBall.setEnabled(false);
                 FrmMain.btnStarGame.setEnabled(false);//>>Desabilida el boton de agregar y de iniciar juego
                 String name = JOptionPane.showInputDialog("Ingrese el nombre");//>Pide el nombre del jugador
-                if (name == null) {
+                if (name == null || name.isEmpty()) {
                     name = "Jugador Anonimo";//Solo emtra en la condicion si en el modal le sa cancelar
                 }
                 int score = Integer.parseInt(FrmMain.lblScore.getText() + "");//Se solicita el valor del score
